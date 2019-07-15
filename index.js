@@ -18,6 +18,7 @@ const fetch = (url, options) => {
         resolve(res);
       });
       res.on('error', reject);
+      res.on('close', reject);
     });
   })
 }
@@ -33,6 +34,7 @@ const trim = (str) => {
 
 const fetchContent = async () => {
   // 第一轮访问，需要找到 cookie
+  console.debug('first');
   const status = await fetch('https://share.acgnx.se', {
     headers: { },
   });
@@ -44,6 +46,7 @@ const fetchContent = async () => {
   });
 
   // 第二轮访问，会返回一个脚本，需要从中抽取第二份 cookie
+  console.debug('second');
   const scripts = await fetch('https://share.acgnx.se', {
     headers: {
       'Cookie': cookies.join('; ')
@@ -54,6 +57,7 @@ const fetchContent = async () => {
   cookies.push(carr[24] + '=' + carr[20]);
 
   // 第三轮访问，应该正常返回数据
+  console.debug('third');
   const source = await fetch('https://share.acgnx.se/sort-1-1.html', {
     headers: {
       'Cookie': cookies.join('; ')
@@ -114,6 +118,13 @@ const parseData = (data) => {
       'en_US': /(英|ENG)/i.test(language),
     };
     video.unstable = false;
+
+    if (!video.filetype.mp4 && !video.filetype.mkv && !video.filetype.flv) {
+      console.debug('unknown filetype: ' + video.title);
+      video.filetype.mp4 = true;
+      video.filetype.mkv = true;
+      video.filetype.flv = true;
+    }
 
     if (!video.language.zh_CN && !video.language.zh_TW &&
         !video.language.ja_JP && !video.language.en_US) {
