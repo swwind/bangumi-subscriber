@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "axios": "^0.19.0",
+    "chalk": "^2.4.2",
+    "jsdom": "^15.1.1",
+    "node-notifier": "^5.4.0",
+    "open": "^6.4.0",
+    "ramda": "^0.26.1"
+  },
+  "name": "bangumi-subscribe",
+  "version": "1.0.0",
+  "description": "bangumi subscriber",
+  "main": "index.js",
+  "author": "swwind <swwind233@gmail.com>",
+  "license": "MIT"
+}
