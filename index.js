@@ -9,7 +9,7 @@ const console = require('./log');
 
 const fetch = (url, options) => {
   options.headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36';
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     https.get(url, options, (res) => {
       let rawData = '';
       res.on('data', (chunk) => { rawData += chunk; });
@@ -17,6 +17,7 @@ const fetch = (url, options) => {
         res.data = rawData;
         resolve(res);
       });
+      res.on('error', reject);
     });
   })
 }
@@ -59,7 +60,7 @@ const fetchContent = async () => {
     }
   });
 
-  console.log('fetched');
+  console.debug('fetched');
 
   const { document } = new JSDOM(source.data).window;
   const elems = Array.from(document.querySelectorAll('tbody#data_list tr'));
@@ -114,10 +115,9 @@ const parseData = (data) => {
     };
     video.unstable = false;
 
-    // console.log(video.title);
     if (!video.language.zh_CN && !video.language.zh_TW &&
         !video.language.ja_JP && !video.language.en_US) {
-      console.warn('unknown language: ' + video.title);
+      console.debug('unknown language: ' + video.title);
       video.language.zh_CN = true;
       video.language.zh_TW = true;
       video.language.ja_JP = true;
@@ -126,10 +126,10 @@ const parseData = (data) => {
 
     const index = extract(/(\D|^)\d?\d\d(\.5)?(话|話|集|$)/g);
     if (index.length < 1) {
-      console.error('unknown episode(movie?): ' + video.title);
+      console.debug('unknown episode(movie?): ' + video.title);
       return null;
     } else if (index.length > 1) {
-      console.error('multi episode: ' + video.title);
+      console.debug('multi episode: ' + video.title);
       return null;
     }
     video.episode = Number(index[0].match(/\d?\d\d(\.5)?/)[0]);
@@ -142,9 +142,10 @@ const attachDownload = (name, video) => {
   notifier.notify({
     title: `「${name}」第 ${video.episode} 话更新了！`,
     message: '已经开始下载了',
-    sound: true,
-    wait: true,
   });
+  console.log(`[${new Date().toISOString()}]`);
+  console.log('  title: ' + video.title);
+  console.log('  start: ' + video.link);
   open(video.link);
 }
 
@@ -152,7 +153,7 @@ const toArray = (arr) => Array.isArray(arr) ? arr : [ arr ];
 const arrMatch = (arr, obj) => R.any((key) => !!obj[key], arr);
 
 const main = async () => {
-  console.log('start update...');
+  console.debug('start update...');
   const subscribe = require('./subscribe.json');
   try {
     const data = await fetchContent();
@@ -176,12 +177,12 @@ const main = async () => {
       }));
     }));
 
-    console.log('saving...');
+    console.debug('saving...');
 
     await fs.writeFile('./subscribe.json', JSON.stringify(subscribe, null, 2));
 
-    console.log(used ? `updated ${used} videos` : 'no update found');
-    console.log('finished');
+    console.debug(used ? `updated ${used} videos` : 'no update found');
+    console.debug('finished');
 
   } catch (e) {
     console.error(e);
