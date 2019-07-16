@@ -2,7 +2,9 @@
   {
     "name": "某科学的一方通行",
     "keywords": [
-      "一方通行"
+      "一方通行",
+      "Accelerator",
+      "accelerator"
     ],
     "got": [
       1
@@ -28,6 +30,20 @@
     "keywords": [
       "实况主",
       "實況主"
+    ],
+    "got": [
+      1,
+      2
+    ],
+    "resolution": "1080p"
+  },
+  {
+    "name": "重来吧！魔王大人",
+    "keywords": [
+      "重来",
+      "重來",
+      "retry",
+      "Retry"
     ],
     "got": [
       1,
