@@ -1,8 +1,8 @@
 # 番剧订阅器
 
-自动抓取「末日動漫資源庫」中的更新并打开 magnet 链接。
+订阅「末日動漫資源庫」中的更新并自动打开 magnet 链接。
 
-所以需要一个能用的 BT 下载工具，并且请设置自动下载。
+所以需要一个能用的 BT 下载工具（比如 [qbittorrent](https://github.com/qbittorrent/qBittorrent)），并且已经开启自动下载。
 
 使用前先修改 `subscribe.json`：
 
@@ -35,3 +35,5 @@
 ```
 
 然后用 `node index.js` 来启动。
+
+![mashiro](https://blog.swwind.me/img/shiina-mashiro.jpg)
