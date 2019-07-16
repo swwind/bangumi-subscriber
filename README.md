@@ -4,6 +4,14 @@
 
 所以需要一个能用的 BT 下载工具（比如 [qbittorrent](https://github.com/qbittorrent/qBittorrent)），并且已经开启自动下载。
 
+## 安装
+
+```bash
+git clone https://github.com/swwind/bangumi-subscriber
+cd bangumi-subscriber
+yarn install
+```
+
 使用前先修改 `subscribe.json`：
 
 ```json
@@ -11,7 +19,8 @@
   {
     // 自定义 番剧名
     "name": "某科学的一方通行",
-    // 关键词，下载依据
+    // 关键词，如果有匹配则认为是该番剧的更新
+    // 注意简繁区别
     "keywords": [
       "一方通行",
       "Accelerator"
@@ -36,4 +45,4 @@
 
 然后用 `node index.js` 来启动。
 
-![mashiro](https://blog.swwind.me/img/shiina-mashiro.jpg)
+~~我永远喜欢艾米莉亚~~
